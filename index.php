@@ -3,7 +3,6 @@ require_once __DIR__ . '/includes/auth.php';
 requireLogin();
 $pageTitle = 'Dashboard';
 
-// Live stats
 $uid = $_SESSION['user_id'];
 
 $clientCount = $pdo->prepare('SELECT COUNT(*) FROM clients WHERE user_id = ?');
@@ -25,28 +24,41 @@ $unpaidInvoices = $unpaid->fetchColumn();
 
 require __DIR__ . '/includes/header.php';
 ?>
-<div class="card">
-    <h2>Welcome, <?= htmlspecialchars($user['username']) ?></h2>
-    <p>Manage your freelance clients, projects, billable hours, and invoices.</p>
+<div class="card" style="border:none; background:transparent; box-shadow:none; padding:0 0 1rem;">
+    <h1 style="font-size:1.8rem; margin-bottom:0.25rem;">Welcome back, <?= htmlspecialchars($user['username']) ?> 👋</h1>
+    <p style="color:var(--muted);">Here's what's happening with your freelance business today.</p>
 </div>
 
-<div class="card">
-    <h2>Quick Stats</h2>
-    <div class="grid">
-        <div class="stat"><strong><?= (int)$clients ?></strong> Clients</div>
-        <div class="stat"><strong><?= (int)$projects ?></strong> Active Projects</div>
-        <div class="stat"><strong><?= number_format($hours, 1) ?></strong> Hours this month</div>
-        <div class="stat"><strong><?= (int)$unpaidInvoices ?></strong> Unpaid invoices</div>
+<div class="grid" style="margin-bottom:1.5rem;">
+    <div class="stat">
+        <div class="icon" style="background:#dbeafe; color:#1d4ed8;">👥</div>
+        <strong><?= (int)$clients ?></strong>
+        <span>Clients</span>
+    </div>
+    <div class="stat">
+        <div class="icon" style="background:#dcfce7; color:#16a34a;">📁</div>
+        <strong><?= (int)$projects ?></strong>
+        <span>Active Projects</span>
+    </div>
+    <div class="stat">
+        <div class="icon" style="background:#f3e8ff; color:#7c3aed;">⏱️</div>
+        <strong><?= number_format($hours, 1) ?></strong>
+        <span>Hours this month</span>
+    </div>
+    <div class="stat">
+        <div class="icon" style="background:#fee2e2; color:#dc2626;">📄</div>
+        <strong><?= (int)$unpaidInvoices ?></strong>
+        <span>Unpaid invoices</span>
     </div>
 </div>
 
 <div class="card">
     <h2>Quick Actions</h2>
-    <p>
-        <a href="client_form.php" class="btn">Add Client</a>
-        <a href="project_form.php" class="btn">Add Project</a>
+    <p style="margin-top:0.5rem;">
+        <a href="client_form.php" class="btn">+ Add Client</a>
+        <a href="project_form.php" class="btn">+ Add Project</a>
         <a href="hours.php" class="btn">Log Hours</a>
-        <a href="invoices.php" class="btn">Invoices</a>
+        <a href="invoices.php" class="btn">View Invoices</a>
     </p>
 </div>
 <?php require __DIR__ . '/includes/footer.php'; ?> 
