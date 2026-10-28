@@ -1,0 +1,23 @@
+# Config with secrets
+includes/config.php
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Composer (if added later)
+vendor/
+composer.lock
+
+# Uploads / generated PDFs (optional)
+invoices/
+uploads/
