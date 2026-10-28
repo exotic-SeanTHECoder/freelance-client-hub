@@ -1,62 +1,52 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
 requireLogin();
+$pageTitle = 'Dashboard';
 
-$user = currentUser();
+// Live stats
+$uid = $_SESSION['user_id'];
+
+$clientCount = $pdo->prepare('SELECT COUNT(*) FROM clients WHERE user_id = ?');
+$clientCount->execute([$uid]);
+$clients = $clientCount->fetchColumn();
+
+$activeProjects = $pdo->prepare('SELECT COUNT(*) FROM projects WHERE user_id = ? AND status = "active"');
+$activeProjects->execute([$uid]);
+$projects = $activeProjects->fetchColumn();
+
+$monthStart = date('Y-m-01');
+$hoursThisMonth = $pdo->prepare('SELECT COALESCE(SUM(hours),0) FROM time_entries WHERE user_id = ? AND entry_date >= ?');
+$hoursThisMonth->execute([$uid, $monthStart]);
+$hours = $hoursThisMonth->fetchColumn();
+
+$unpaid = $pdo->prepare('SELECT COUNT(*) FROM invoices WHERE user_id = ? AND status IN ("sent","overdue")');
+$unpaid->execute([$uid]);
+$unpaidInvoices = $unpaid->fetchColumn();
+
+require __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — Freelance Client Hub</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        .topbar { background: var(--primary); color: white; padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
-        .topbar a { color: white; text-decoration: none; }
-        .dashboard { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
-        .card h2 { margin-bottom: 0.75rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-        .stat { text-align: center; }
-        .stat strong { display: block; font-size: 1.8rem; color: var(--primary); }
-    </style>
-</head>
-<body>
-    <div class="topbar">
-        <strong>Freelance Client Hub</strong>
-        <div>
-            Logged in as <strong><?= htmlspecialchars($user['username']) ?></strong>
-            &nbsp;|&nbsp;
-            <a href="logout.php">Logout</a>
-        </div>
+<div class="card">
+    <h2>Welcome, <?= htmlspecialchars($user['username']) ?></h2>
+    <p>Manage your freelance clients, projects, billable hours, and invoices.</p>
+</div>
+
+<div class="card">
+    <h2>Quick Stats</h2>
+    <div class="grid">
+        <div class="stat"><strong><?= (int)$clients ?></strong> Clients</div>
+        <div class="stat"><strong><?= (int)$projects ?></strong> Active Projects</div>
+        <div class="stat"><strong><?= number_format($hours, 1) ?></strong> Hours this month</div>
+        <div class="stat"><strong><?= (int)$unpaidInvoices ?></strong> Unpaid invoices</div>
     </div>
+</div>
 
-    <div class="dashboard">
-        <div class="card">
-            <h2>Welcome, <?= htmlspecialchars($user['username']) ?></h2>
-            <p>Your freelance client &amp; project hub is ready. Next features (clients, projects, hours, invoices) are coming soon.</p>
-        </div>
-
-        <div class="card">
-            <h2>Quick Stats</h2>
-            <div class="grid">
-                <div class="stat"><strong>—</strong> Clients</div>
-                <div class="stat"><strong>—</strong> Active Projects</div>
-                <div class="stat"><strong>—</strong> Hours this month</div>
-                <div class="stat"><strong>—</strong> Unpaid invoices</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Next Steps</h2>
-            <ul>
-                <li>Add clients</li>
-                <li>Create projects and set hourly rates</li>
-                <li>Log billable hours</li>
-                <li>Generate PDF invoices</li>
-            </ul>
-        </div>
-    </div>
-</body>
-</html>
+<div class="card">
+    <h2>Quick Actions</h2>
+    <p>
+        <a href="client_form.php" class="btn">Add Client</a>
+        <a href="project_form.php" class="btn">Add Project</a>
+        <a href="hours.php" class="btn">Log Hours</a>
+        <a href="invoices.php" class="btn">Invoices</a>
+    </p>
+</div>
+<?php require __DIR__ . '/includes/footer.php'; ?> 
