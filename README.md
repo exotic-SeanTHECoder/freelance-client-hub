@@ -6,12 +6,13 @@ Built with **PHP**, **MySQL**, and **Vanilla JavaScript** — no heavy framework
 
 ## Features
 
-- Client management (add, edit, view)
-- Project tracking linked to clients
+- Client management (add, edit, delete)
+- Project tracking linked to clients with hourly rates and status
 - Billable hours logging with descriptions
-- Invoice generation (PDF) from logged hours
+- Invoice generation from uninvoiced hours
 - Invoice status tracking (Draft, Sent, Paid, Overdue)
-- Simple dashboard overview
+- Basic PDF invoice download
+- Live dashboard with stats
 - Session-based authentication (secure password hashing + CSRF)
 - First-user setup script
 - Self-hosted and privacy-focused
@@ -21,7 +22,7 @@ Built with **PHP**, **MySQL**, and **Vanilla JavaScript** — no heavy framework
 - Backend: PHP 8.0+
 - Database: MySQL 5.7+ / MariaDB
 - Frontend: HTML5, CSS3, Vanilla JS
-- PDF: FPDF (lightweight pure PHP)
+- PDF: Lightweight pure-PHP PDF generation (can be swapped for full FPDF)
 
 ## Setup Instructions
 
@@ -69,13 +70,22 @@ freelance-client-hub/
 ├── includes/
 │   ├── auth.php
 │   ├── config.example.php
-│   └── db.php
+│   ├── db.php
+│   ├── header.php
+│   └── footer.php
 ├── sql/
 │   └── schema.sql
-├── index.php          (protected dashboard)
+├── index.php
+├── clients.php
+├── client_form.php
+├── projects.php
+├── project_form.php
+├── hours.php
+├── invoices.php
+├── invoice_pdf.php
 ├── login.php
 ├── logout.php
-├── setup.php          (first-user creation)
+├── setup.php
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -85,12 +95,13 @@ freelance-client-hub/
 
 - [x] Database schema
 - [x] Authentication (login/logout + first-user setup)
-- [ ] Client CRUD
-- [ ] Project CRUD
-- [ ] Hours logging
-- [ ] Invoice generation (PDF)
-- [ ] Dashboard with live stats
-- [ ] Responsive UI
+- [x] Client CRUD
+- [x] Project CRUD
+- [x] Hours logging
+- [x] Invoice generation + basic PDF
+- [x] Dashboard with live stats
+- [ ] Full FPDF integration for richer invoices
+- [ ] Responsive UI polish
 - [ ] Docker Compose for easy self-hosting
 
 ## Contributing
