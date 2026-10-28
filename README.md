@@ -16,6 +16,7 @@ Built with **PHP**, **MySQL**, and **Vanilla JavaScript** — no heavy framework
 - Session-based authentication (secure password hashing + CSRF)
 - First-user setup script
 - Self-hosted and privacy-focused
+- Docker Compose support for one-command setup
 
 ## Tech Stack
 
@@ -26,92 +27,70 @@ Built with **PHP**, **MySQL**, and **Vanilla JavaScript** — no heavy framework
 
 ## Setup Instructions
 
+### Option A: Docker (recommended for quick start)
+
+```bash
+git clone https://github.com/exotic-SeanTHECoder/freelance-client-hub.git
+cd freelance-client-hub
+docker compose up -d
+```
+
+Then:
+1. Copy `includes/config.example.php` to `includes/config.php`
+2. Update DB credentials to match docker-compose.yml:
+   - DB_HOST=db
+   - DB_NAME=freelance_hub
+   - DB_USER=hubuser
+   - DB_PASS=hubpass
+3. Visit http://localhost:8080/setup.php to create your admin account
+4. Log in and start using the app
+
+### Option B: Manual (PHP + MySQL)
+
 1. **Requirements**
    - PHP 8.0 or higher with PDO MySQL extension
    - MySQL/MariaDB
-   - Web server (Apache with mod_rewrite recommended, or Nginx, or built-in PHP server for development)
 
-2. **Clone the repository**
+2. **Clone and database**
    ```bash
    git clone https://github.com/exotic-SeanTHECoder/freelance-client-hub.git
    cd freelance-client-hub
+   mysql -u youruser -p freelance_hub < sql/schema.sql
    ```
 
-3. **Database**
-   - Create a MySQL database, e.g. `freelance_hub`
-   - Import the schema:
-     ```bash
-     mysql -u youruser -p freelance_hub < sql/schema.sql
-     ```
+3. **Configuration**
+   - Copy `includes/config.example.php` to `includes/config.php` and edit credentials
 
-4. **Configuration**
-   - Copy `includes/config.example.php` to `includes/config.php`
-   - Edit with your database credentials and a strong `APP_SECRET`
-
-5. **Create the first admin account**
-   - Start the server and visit `/setup.php`
-   - Fill in the form (only works when no users exist yet)
-   - After creation, setup is automatically disabled
-
-6. **Run**
-   - Point your web server document root to the project folder, or:
-     ```bash
-     php -S localhost:8000
-     ```
-   - Visit `http://localhost:8000` → you will be redirected to login
+4. **Create admin**
+   - `php -S localhost:8000`
+   - Visit `/setup.php`
 
 ## Project Structure
 
-```
-freelance-client-hub/
-├── assets/
-│   ├── css/
-│   └── js/
-├── includes/
-│   ├── auth.php
-│   ├── config.example.php
-│   ├── db.php
-│   ├── header.php
-│   └── footer.php
-├── sql/
-│   └── schema.sql
-├── index.php
-├── clients.php
-├── client_form.php
-├── projects.php
-├── project_form.php
-├── hours.php
-├── invoices.php
-├── invoice_pdf.php
-├── login.php
-├── logout.php
-├── setup.php
-├── .gitignore
-├── LICENSE
-└── README.md
-```
+See the repository for the full layout. Key files:
+- `index.php` — Dashboard
+- `clients.php` / `client_form.php`
+- `projects.php` / `project_form.php`
+- `hours.php`
+- `invoices.php` / `invoice_pdf.php`
+- `login.php`, `setup.php`
 
 ## Roadmap
 
 - [x] Database schema
-- [x] Authentication (login/logout + first-user setup)
+- [x] Authentication
 - [x] Client CRUD
 - [x] Project CRUD
 - [x] Hours logging
 - [x] Invoice generation + basic PDF
 - [x] Dashboard with live stats
-- [ ] Full FPDF integration for richer invoices
-- [ ] Responsive UI polish
-- [ ] Docker Compose for easy self-hosting
+- [x] Docker Compose
+- [ ] Full FPDF for richer invoices
+- [ ] Additional reports / export
 
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request.
-
-1. Fork the repo
-2. Create a feature branch
-3. Commit your changes
-4. Open a PR
 
 ## License
 
