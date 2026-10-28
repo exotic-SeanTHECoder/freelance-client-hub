@@ -4,40 +4,58 @@ requireLogin();
 $pageTitle = 'Dashboard';
 
 $uid = $_SESSION['user_id'];
+$user = currentUser();
 
-$clientCount = $pdo->prepare('SELECT COUNT(*) FROM clients WHERE user_id = ?');
-$clientCount->execute([$uid]);
-$clients = $clientCount->fetchColumn();
+// Safe stats queries
+try {
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM clients WHERE user_id = ?');
+    $stmt->execute([$uid]);
+    $clients = (int)$stmt->fetchColumn();
+} catch (Exception $e) {
+    $clients = 0;
+}
 
-$activeProjects = $pdo->prepare('SELECT COUNT(*) FROM projects WHERE user_id = ? AND status = "active"');
-$activeProjects->execute([$uid]);
-$projects = $activeProjects->fetchColumn();
+try {
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM projects WHERE user_id = ? AND status = ?');
+    $stmt->execute([$uid, 'active']);
+    $projects = (int)$stmt->fetchColumn();
+} catch (Exception $e) {
+    $projects = 0;
+}
 
-$monthStart = date('Y-m-01');
-$hoursThisMonth = $pdo->prepare('SELECT COALESCE(SUM(hours),0) FROM time_entries WHERE user_id = ? AND entry_date >= ?');
-$hoursThisMonth->execute([$uid, $monthStart]);
-$hours = $hoursThisMonth->fetchColumn();
+try {
+    $monthStart = date('Y-m-01');
+    $stmt = $pdo->prepare('SELECT COALESCE(SUM(hours),0) FROM time_entries WHERE user_id = ? AND entry_date >= ?');
+    $stmt->execute([$uid, $monthStart]);
+    $hours = (float)$stmt->fetchColumn();
+} catch (Exception $e) {
+    $hours = 0;
+}
 
-$unpaid = $pdo->prepare('SELECT COUNT(*) FROM invoices WHERE user_id = ? AND status IN ("sent","overdue")');
-$unpaid->execute([$uid]);
-$unpaidInvoices = $unpaid->fetchColumn();
+try {
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM invoices WHERE user_id = ? AND status IN (?, ?)');
+    $stmt->execute([$uid, 'sent', 'overdue']);
+    $unpaidInvoices = (int)$stmt->fetchColumn();
+} catch (Exception $e) {
+    $unpaidInvoices = 0;
+}
 
 require __DIR__ . '/includes/header.php';
 ?>
 <div class="card" style="border:none; background:transparent; box-shadow:none; padding:0 0 1rem;">
-    <h1 style="font-size:1.8rem; margin-bottom:0.25rem;">Welcome back, <?= htmlspecialchars($user['username']) ?> 👋</h1>
+    <h1 style="font-size:1.8rem; margin-bottom:0.25rem;">Welcome back, <?= htmlspecialchars($user['username'] ?? 'User') ?> 👋</h1>
     <p style="color:var(--muted);">Here's what's happening with your freelance business today.</p>
 </div>
 
 <div class="grid" style="margin-bottom:1.5rem;">
     <div class="stat">
         <div class="icon" style="background:#dbeafe; color:#1d4ed8;">👥</div>
-        <strong><?= (int)$clients ?></strong>
+        <strong><?= $clients ?></strong>
         <span>Clients</span>
     </div>
     <div class="stat">
         <div class="icon" style="background:#dcfce7; color:#16a34a;">📁</div>
-        <strong><?= (int)$projects ?></strong>
+        <strong><?= $projects ?></strong>
         <span>Active Projects</span>
     </div>
     <div class="stat">
@@ -47,7 +65,7 @@ require __DIR__ . '/includes/header.php';
     </div>
     <div class="stat">
         <div class="icon" style="background:#fee2e2; color:#dc2626;">📄</div>
-        <strong><?= (int)$unpaidInvoices ?></strong>
+        <strong><?= $unpaidInvoices ?></strong>
         <span>Unpaid invoices</span>
     </div>
 </div>
