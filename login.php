@@ -78,7 +78,7 @@ $csrf = generateCsrfToken();
         </form>
 
         <p style="margin-top:1.5rem; font-size:0.95rem; color:var(--muted);">
-            First time? <a href="setup.php" style="color:var(--primary);">Create the admin account</a>
+            Don't have an account? <a href="register.php" style="color:var(--primary);">Create one</a>
         </p>
     </div>
 </body>

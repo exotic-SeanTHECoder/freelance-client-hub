@@ -2,100 +2,44 @@
 
 A lightweight, self-hosted open-source portal for freelancers to manage clients, track projects, log billable hours, and generate PDF invoices.
 
-Built with **PHP**, **MySQL**, and **Vanilla JavaScript** — no heavy frameworks required.
+**Anyone can register** and start using their own private workspace.
+
+Built with **PHP**, **MySQL**, and **Vanilla JavaScript**.
 
 ## Features
 
+- Public user registration (each user gets their own isolated data)
 - Client management (add, edit, delete)
-- Project tracking linked to clients with hourly rates and status
-- Billable hours logging with descriptions
-- Invoice generation from uninvoiced hours
-- Invoice status tracking (Draft, Sent, Paid, Overdue)
-- Basic PDF invoice download
+- Project tracking with hourly rates and status
+- Billable hours logging
+- Invoice generation from uninvoiced hours + status tracking
+- Basic PDF invoices
 - Live dashboard with stats
-- Session-based authentication (secure password hashing + CSRF)
-- First-user setup script
-- Self-hosted and privacy-focused
-- Docker Compose support for one-command setup
+- Secure session auth + CSRF protection
+- Docker support
 
-## Tech Stack
+## Live Demo
 
-- Backend: PHP 8.0+
-- Database: MySQL 5.7+ / MariaDB
-- Frontend: HTML5, CSS3, Vanilla JS
-- PDF: Lightweight pure-PHP PDF generation (can be swapped for full FPDF)
+Coming soon — a public demo will be available shortly where anyone can register and try it.
 
-## Setup Instructions
+## Quick Start (Self-Host)
 
-### Option A: Docker (recommended for quick start)
-
+### Docker
 ```bash
 git clone https://github.com/exotic-SeanTHECoder/freelance-client-hub.git
 cd freelance-client-hub
 docker compose up -d
 ```
+Then configure `includes/config.php` with the Docker DB credentials and visit the site to register.
 
-Then:
-1. Copy `includes/config.example.php` to `includes/config.php`
-2. Update DB credentials to match docker-compose.yml:
-   - DB_HOST=db
-   - DB_NAME=freelance_hub
-   - DB_USER=hubuser
-   - DB_PASS=hubpass
-3. Visit http://localhost:8080/setup.php to create your admin account
-4. Log in and start using the app
-
-### Option B: Manual (PHP + MySQL)
-
-1. **Requirements**
-   - PHP 8.0 or higher with PDO MySQL extension
-   - MySQL/MariaDB
-
-2. **Clone and database**
-   ```bash
-   git clone https://github.com/exotic-SeanTHECoder/freelance-client-hub.git
-   cd freelance-client-hub
-   mysql -u youruser -p freelance_hub < sql/schema.sql
-   ```
-
-3. **Configuration**
-   - Copy `includes/config.example.php` to `includes/config.php` and edit credentials
-
-4. **Create admin**
-   - `php -S localhost:8000`
-   - Visit `/setup.php`
-
-## Project Structure
-
-See the repository for the full layout. Key files:
-- `index.php` — Dashboard
-- `clients.php` / `client_form.php`
-- `projects.php` / `project_form.php`
-- `hours.php`
-- `invoices.php` / `invoice_pdf.php`
-- `login.php`, `setup.php`
-
-## Roadmap
-
-- [x] Database schema
-- [x] Authentication
-- [x] Client CRUD
-- [x] Project CRUD
-- [x] Hours logging
-- [x] Invoice generation + basic PDF
-- [x] Dashboard with live stats
-- [x] Docker Compose
-- [ ] Full FPDF for richer invoices
-- [ ] Additional reports / export
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
+### Manual
+1. Import `sql/schema.sql` into MySQL
+2. Copy `includes/config.example.php` to `includes/config.php` and edit
+3. Run with PHP's built-in server or Apache/Nginx
+4. Visit `/register.php` to create an account
 
 ## License
 
-MIT License — see [LICENSE](LICENSE)
+MIT License
 
----
-
-Created by [Sean](https://github.com/exotic-SeanTHECoder) for the open-source community.
+Created by [Sean](https://github.com/exotic-SeanTHECoder)
