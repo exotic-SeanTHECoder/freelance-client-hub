@@ -51,16 +51,12 @@ $csrf = generateCsrfToken();
         .login-box h2 { font-size: 1.3rem; margin: 1rem 0 1.25rem; }
         .form-group { text-align: left; margin-bottom: 1rem; }
         button { width: 100%; margin-top: 0.5rem; }
-        .brand-icon { width: 48px; height: 48px; margin: 0 auto 0.5rem; color: var(--primary); }
+        .logo { height: 64px; width: auto; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
     <div class="login-box">
-        <div class="brand-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="48" height="48">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-        </div>
+        <img src="assets/logo.png" alt="Freelance Client Hub" class="logo">
         <h1>Freelance Client Hub</h1>
         <div style="width:60px; height:3px; background:var(--primary); margin:0.6rem auto 0;"></div>
         <h2>Sign in</h2>
