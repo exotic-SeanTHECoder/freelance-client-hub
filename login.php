@@ -36,28 +36,33 @@ $csrf = generateCsrfToken();
     <title>Login — Freelance Client Hub</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
-        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
         .login-box {
             max-width: 420px;
             width: 100%;
             background: var(--card);
-            padding: 2.5rem 2rem;
+            padding: 2rem 1.5rem;
             border-radius: 16px;
             border: 1px solid var(--border);
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
             text-align: center;
         }
-        .login-box h1 { font-size: 1.5rem; margin: 0.5rem 0 0.25rem; }
-        .login-box h2 { font-size: 1.4rem; margin: 1.25rem 0 1.5rem; }
-        .form-group { text-align: left; margin-bottom: 1.1rem; }
+        .login-box h1 { font-size: 1.4rem; margin: 0.5rem 0 0.25rem; }
+        .login-box h2 { font-size: 1.3rem; margin: 1rem 0 1.25rem; }
+        .form-group { text-align: left; margin-bottom: 1rem; }
         button { width: 100%; margin-top: 0.5rem; }
+        .brand-icon { width: 48px; height: 48px; margin: 0 auto 0.5rem; color: var(--primary); }
     </style>
 </head>
 <body>
     <div class="login-box">
-        <div style="font-size:2.5rem;">💼</div>
+        <div class="brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+        </div>
         <h1>Freelance Client Hub</h1>
-        <div style="width:60px; height:3px; background:var(--primary); margin:0.75rem auto 0;"></div>
+        <div style="width:60px; height:3px; background:var(--primary); margin:0.6rem auto 0;"></div>
         <h2>Sign in</h2>
 
         <?php if ($error): ?>
@@ -77,7 +82,7 @@ $csrf = generateCsrfToken();
             <button type="submit" class="btn">Login</button>
         </form>
 
-        <p style="margin-top:1.5rem; font-size:0.95rem; color:var(--muted);">
+        <p style="margin-top:1.25rem; font-size:0.95rem; color:var(--muted);">
             Don't have an account? <a href="register.php" style="color:var(--primary);">Create one</a>
         </p>
     </div>
