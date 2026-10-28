@@ -1,28 +1,24 @@
 # Freelance Client Hub
 
-A lightweight, self-hosted open-source portal for freelancers to manage clients, track projects, log billable hours, and generate PDF invoices.
+A lightweight open-source portal for freelancers to manage clients, track projects, log billable hours, and generate PDF invoices.
 
-**Anyone can register** and start using their own private workspace.
-
-Built with **PHP**, **MySQL**, and **Vanilla JavaScript**.
-
-## Features
-
-- Public user registration (each user gets their own isolated data)
-- Client management (add, edit, delete)
-- Project tracking with hourly rates and status
-- Billable hours logging
-- Invoice generation from uninvoiced hours + status tracking
-- Basic PDF invoices
-- Live dashboard with stats
-- Secure session auth + CSRF protection
-- Docker support
+**Anyone can register** and get their own private workspace.
 
 ## Live Demo
 
-Coming soon — a public demo will be available shortly where anyone can register and try it.
+A public demo is being set up on Render. Once live, anyone can visit the URL and register their own account.
 
-## Quick Start (Self-Host)
+## Features
+
+- Public registration
+- Isolated data per user
+- Clients, Projects, Hours logging, Invoices + PDF
+- Dashboard stats
+- Secure auth
+
+## Self-Host
+
+See Docker instructions below or import the SQL schema and configure `includes/config.php`.
 
 ### Docker
 ```bash
@@ -30,16 +26,11 @@ git clone https://github.com/exotic-SeanTHECoder/freelance-client-hub.git
 cd freelance-client-hub
 docker compose up -d
 ```
-Then configure `includes/config.php` with the Docker DB credentials and visit the site to register.
 
-### Manual
-1. Import `sql/schema.sql` into MySQL
-2. Copy `includes/config.example.php` to `includes/config.php` and edit
-3. Run with PHP's built-in server or Apache/Nginx
-4. Visit `/register.php` to create an account
+## Deploy to Render (one-click style)
+
+The repo includes `render.yaml`. On Render you can create a Blueprint from this repo for a free web service + free Postgres/MySQL-compatible database.
 
 ## License
 
-MIT License
-
-Created by [Sean](https://github.com/exotic-SeanTHECoder)
+MIT — Created by [Sean](https://github.com/exotic-SeanTHECoder)
