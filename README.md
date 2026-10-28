@@ -12,7 +12,8 @@ Built with **PHP**, **MySQL**, and **Vanilla JavaScript** — no heavy framework
 - Invoice generation (PDF) from logged hours
 - Invoice status tracking (Draft, Sent, Paid, Overdue)
 - Simple dashboard overview
-- Session-based authentication
+- Session-based authentication (secure password hashing + CSRF)
+- First-user setup script
 - Self-hosted and privacy-focused
 
 ## Tech Stack
@@ -44,17 +45,19 @@ Built with **PHP**, **MySQL**, and **Vanilla JavaScript** — no heavy framework
 
 4. **Configuration**
    - Copy `includes/config.example.php` to `includes/config.php`
-   - Edit with your database credentials and a strong secret for sessions/CSRF
+   - Edit with your database credentials and a strong `APP_SECRET`
 
-5. **Create initial admin user**
-   - Run the setup script (coming soon) or insert manually into the `users` table (password hashed with `password_hash()`)
+5. **Create the first admin account**
+   - Start the server and visit `/setup.php`
+   - Fill in the form (only works when no users exist yet)
+   - After creation, setup is automatically disabled
 
 6. **Run**
    - Point your web server document root to the project folder, or:
      ```bash
      php -S localhost:8000
      ```
-   - Visit `http://localhost:8000`
+   - Visit `http://localhost:8000` → you will be redirected to login
 
 ## Project Structure
 
@@ -64,11 +67,15 @@ freelance-client-hub/
 │   ├── css/
 │   └── js/
 ├── includes/
+│   ├── auth.php
 │   ├── config.example.php
 │   └── db.php
 ├── sql/
 │   └── schema.sql
-├── index.php
+├── index.php          (protected dashboard)
+├── login.php
+├── logout.php
+├── setup.php          (first-user creation)
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -77,12 +84,12 @@ freelance-client-hub/
 ## Roadmap
 
 - [x] Database schema
-- [ ] Authentication (login/logout)
+- [x] Authentication (login/logout + first-user setup)
 - [ ] Client CRUD
 - [ ] Project CRUD
 - [ ] Hours logging
 - [ ] Invoice generation (PDF)
-- [ ] Dashboard with stats
+- [ ] Dashboard with live stats
 - [ ] Responsive UI
 - [ ] Docker Compose for easy self-hosting
 
