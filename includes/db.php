@@ -1,32 +1,44 @@
 <?php
 /**
- * Database connection (PDO) — Postgres on Render, MySQL locally
- * Automatically creates tables on first run for Postgres.
+ * Database connection (PDO) — supports Render DATABASE_URL or individual vars
  */
 require_once __DIR__ . '/config.php';
 
-// Detect if we're on Postgres (Render) or MySQL
-$isPostgres = str_contains(DB_HOST, 'render.com') || str_contains(DB_HOST, 'dpg-') || getenv('DATABASE_URL');
+$databaseUrl = getenv('DATABASE_URL');
 
 try {
-    if ($isPostgres) {
-        $dsn = "pgsql:host=" . DB_HOST . ";port=5432;dbname=" . DB_NAME;
-    } else {
-        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
-    }
+    if ($databaseUrl) {
+        // Parse Render's Internal Database URL
+        $url = parse_url($databaseUrl);
+        $host = $url['host'];
+        $port = $url['port'] ?? 5432;
+        $dbname = ltrim($url['path'], '/');
+        $user = $url['user'];
+        $pass = $url['pass'];
 
-    $pdo = new PDO(
-        $dsn,
-        DB_USER,
-        DB_PASS,
-        [
+        $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+        $pdo = new PDO($dsn, $user, $pass, [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
-        ]
-    );
+        ]);
+        $isPostgres = true;
+    } else {
+        // Fallback to individual vars (local MySQL or manual)
+        $isPostgres = str_contains(DB_HOST, 'render.com') || str_contains(DB_HOST, 'dpg-');
+        if ($isPostgres) {
+            $dsn = "pgsql:host=" . DB_HOST . ";port=5432;dbname=" . DB_NAME;
+        } else {
+            $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+        }
+        $pdo = new PDO($dsn, DB_USER, DB_PASS, [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ]);
+    }
 
-    // Auto-create tables for Postgres demo
+    // Auto-create tables for Postgres
     if ($isPostgres) {
         $schema = <<<'SQL'
 CREATE TABLE IF NOT EXISTS users (
