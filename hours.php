@@ -7,8 +7,8 @@ $projectFilter = (int)($_GET['project'] ?? 0);
 $error = '';
 
 // Projects for dropdown
-$stmt = $pdo->prepare('SELECT id, name, hourly_rate FROM projects WHERE user_id = ? AND status = "active" ORDER BY name');
-$stmt->execute([$_SESSION['user_id']]);
+$stmt = $pdo->prepare('SELECT id, name, hourly_rate FROM projects WHERE user_id = ? AND status = ? ORDER BY name');
+$stmt->execute([$_SESSION['user_id'], 'active']);
 $projects = $stmt->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['log_hours'])) {

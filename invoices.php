@@ -11,7 +11,7 @@ if (isset($_GET['generate']) && verifyCsrfToken($_GET['csrf'] ?? null)) {
     $project = $stmt->fetch();
 
     if ($project) {
-        $stmt = $pdo->prepare('SELECT * FROM time_entries WHERE project_id = ? AND user_id = ? AND invoiced = 0');
+        $stmt = $pdo->prepare('SELECT * FROM time_entries WHERE project_id = ? AND user_id = ? AND invoiced = FALSE');
         $stmt->execute([$projectId, $_SESSION['user_id']]);
         $entries = $stmt->fetchAll();
 
@@ -29,7 +29,7 @@ if (isset($_GET['generate']) && verifyCsrfToken($_GET['csrf'] ?? null)) {
 
             // Mark entries as invoiced and add line items
             foreach ($entries as $e) {
-                $pdo->prepare('UPDATE time_entries SET invoiced = 1 WHERE id = ?')->execute([$e['id']]);
+                $pdo->prepare('UPDATE time_entries SET invoiced = TRUE WHERE id = ?')->execute([$e['id']]);
                 $amount = $e['hours'] * $project['hourly_rate'];
                 $pdo->prepare('INSERT INTO invoice_items (invoice_id, description, quantity, unit_price, amount) VALUES (?,?,?,?,?)')
                     ->execute([$invoiceId, $e['description'] . ' (' . $e['entry_date'] . ')', $e['hours'], $project['hourly_rate'], $amount]);
@@ -68,7 +68,7 @@ $invoices = $stmt->fetchAll();
 $stmt = $pdo->prepare('
     SELECT p.id, p.name, COUNT(t.id) AS uninvoiced
     FROM projects p
-    JOIN time_entries t ON t.project_id = p.id AND t.invoiced = 0
+    JOIN time_entries t ON t.project_id = p.id AND t.invoiced = FALSE
     WHERE p.user_id = ?
     GROUP BY p.id
 ');
